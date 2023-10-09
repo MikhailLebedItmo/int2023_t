@@ -1,6 +1,13 @@
 #include "number.h"
 
 
+int2023_t::int2023_t() {
+    for (size_t i = 0; i < kDataSize; ++i) {
+        data[i] = 0;
+    }
+}
+
+
 int2023_t from_int(int32_t i) {
     return int2023_t();
 }
@@ -37,4 +44,9 @@ std::ostream& operator<<(std::ostream& stream, const int2023_t& value) {
     stream << "Implement me";
 
     return stream;
+}
+
+
+int main() {
+
 }
