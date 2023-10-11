@@ -2,7 +2,9 @@
 
 #include <cstring>
 #include <iostream>
+#include <stdint.h>
 #include <string>
+#include <vcruntime.h>
 
 int2023_t::int2023_t() {
     for (size_t i = 0; i < kDataSize; ++i) {
@@ -83,16 +85,29 @@ int2023_t operator-(const int2023_t& lhs, const int2023_t& rhs) {
 }
 
 int2023_t operator-(const int2023_t rhs) {
-    auto response = int2023_t();
+    auto result = int2023_t();
     for (size_t i = 0; i < int2023_t::kDataSize; ++i) {
-        response.data[i] = ~rhs.data[i];
+        result.data[i] = ~rhs.data[i];
     }
-    ++response;
-    return response;
+    ++result;
+    return result;
 }
 
 int2023_t operator*(const int2023_t& lhs, const int2023_t& rhs) {
-    return int2023_t();
+    auto result = int2023_t();
+    for(int i = int2023_t::kDataSize - 1; i >= 0; --i) {
+        auto num = lhs * rhs.data[i];  // change name!
+        size_t shift = int2023_t::kDataSize - 1 - i;
+        // num *= 256 ** shift
+        for (size_t t = 0; t < int2023_t::kDataSize - shift; ++t) {
+            num.data[t] = num.data[t + shift];
+        }
+        for (size_t t = int2023_t::kDataSize - shift; t < int2023_t::kDataSize; ++t) {
+            num.data[t] = static_cast<uint8_t>(0);
+        }
+        result += num;
+    }
+    return result;
 }
 
 int2023_t operator*(const int2023_t& lhs, uint8_t rhs) {

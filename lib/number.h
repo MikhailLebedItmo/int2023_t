@@ -1,6 +1,7 @@
 #pragma once
 #include <cinttypes>
 #include <iostream>
+#include <stdint.h>
 
 
 struct int2023_t {
