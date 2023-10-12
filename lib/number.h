@@ -9,9 +9,7 @@ struct int2023_t {
     static const size_t kDataSize = 253;
     static const uint32_t kSystemBase = 256;
     uint8_t data[kDataSize]; 
-    size_t len() const;
     int2023_t();
-    int2023_t(const int2023_t& other);
 };
 
 static_assert(sizeof(int2023_t) <= 253, "Size of int2023_t must be no higher than 253 bytes");
