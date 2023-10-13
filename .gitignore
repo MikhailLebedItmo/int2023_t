@@ -30,3 +30,10 @@
 *.exe
 *.out
 *.app
+
+# Files
+test.cpp
+
+# Directories
+MyTests/
+time_tests/

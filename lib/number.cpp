@@ -17,10 +17,10 @@ int2023_t from_int(int32_t i) {
     auto result = int2023_t();
     bool is_negative = i < 0;
     i = abs(i);
-    size_t digit_cnt = 0;
+    size_t digit_cnt = int2023_t::kDataSize;
     while(i != 0) {
-        result.data[digit_cnt++] = i % int2023_t::kDataSize;
-        i /= int2023_t::kDataSize;
+        result.data[--digit_cnt] = i % int2023_t::kSystemBase;
+        i /= int2023_t::kSystemBase;
     }
 
     if (is_negative) {
