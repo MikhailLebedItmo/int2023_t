@@ -2,15 +2,10 @@
 
 #include <cstring>
 #include <iostream>
-#include <regex>
-#include <stdint.h>
 #include <string>
-#include <vcruntime.h>
 
 int2023_t::int2023_t() {
-    for (size_t i = 0; i < kDataSize; ++i) {
-        data[i] = 0;
-    }
+    memset(data, 0, kDataSize);
 }
 
 int2023_t from_int(int32_t i) {
@@ -49,16 +44,9 @@ int2023_t from_string(const char* buff) {
     return result;
 }
 
-int2023_t operator+(const int2023_t& lhs, const int2023_t& rhs) {
-    uint32_t carry = 0;
-    auto result = int2023_t();
-    for (int i = int2023_t::kDataSize - 1; i >= 0; --i) {
-        uint32_t sum = carry + lhs.data[i] + rhs.data[i];
-        result.data[i] = static_cast<uint8_t>(sum % int2023_t::kSystemBase); 
-        carry = sum / int2023_t::kSystemBase;
-    }
-
-    return result;
+int2023_t operator+(int2023_t lhs, const int2023_t& rhs) {
+    lhs += rhs;
+    return lhs;
 }
 
 int2023_t& operator+=(int2023_t& lhs, const int2023_t& rhs) {
@@ -72,16 +60,9 @@ int2023_t& operator+=(int2023_t& lhs, const int2023_t& rhs) {
     return lhs;
 }
 
-int2023_t operator+(const int2023_t& lhs, uint8_t rhs) {
-    uint32_t carry = 0;
-    auto result = int2023_t();
-    for (int i = int2023_t::kDataSize - 1; i >= 0; --i) {
-        uint32_t sum = carry + lhs.data[i] + rhs;
-        result.data[i] = static_cast<uint8_t>(sum % int2023_t::kSystemBase);
-        carry = sum / int2023_t::kSystemBase;
-    }
-
-    return result;
+int2023_t operator+(int2023_t lhs, uint8_t rhs) {
+    lhs += rhs;
+    return lhs;
 }
 
 int2023_t& operator+=(int2023_t& lhs, uint8_t rhs) {
@@ -108,14 +89,13 @@ int2023_t operator-(const int2023_t& lhs, const int2023_t& rhs) {
     return lhs + (-rhs);
 }
 
-int2023_t operator-(const int2023_t rhs) {
-    auto result = int2023_t();
+int2023_t operator-(int2023_t rhs) {
     for (size_t i = 0; i < int2023_t::kDataSize; ++i) {
-        result.data[i] = ~rhs.data[i];
+        rhs.data[i] = ~rhs.data[i];
     }
-    ++result;
+    ++rhs;
 
-    return result;
+    return rhs;
 }
 
 int2023_t shift_digits_to_left(int2023_t value, uint8_t shift) {
@@ -140,16 +120,9 @@ int2023_t operator*(const int2023_t& lhs, const int2023_t& rhs) {
     return result;
 }
 
-int2023_t operator*(const int2023_t& lhs, uint8_t rhs) {
-    auto result = int2023_t();
-    uint32_t carry = 0;
-    for (int i = int2023_t::kDataSize - 1; i >= 0; --i) {
-        uint32_t sum = carry + static_cast<uint32_t>(rhs) * lhs.data[i];
-        result.data[i] = sum % int2023_t::kSystemBase;
-        carry = sum / int2023_t::kSystemBase;
-    }
-
-    return result;
+int2023_t operator*(int2023_t lhs, uint8_t rhs) {
+    lhs *= rhs;
+    return lhs;
 }
 
 int2023_t& operator*=(int2023_t& lhs, uint8_t rhs) {
@@ -177,12 +150,12 @@ size_t len(const int2023_t& value) {
     return int2023_t::kDataSize - get_ind_of_first_digit(value);
 }
 
-bool is_negative(const int2023_t value) {
+bool is_negative(const int2023_t& value) {
     int char_size = 8;
     return static_cast<bool>((value.data[0] >> (char_size - 1)) & 1);
 }
 
-int2023_t abs(int2023_t value) {
+int2023_t abs(const int2023_t& value) {
     if (is_negative(value)) {
 
         return -value;
@@ -260,6 +233,5 @@ std::ostream& operator<<(std::ostream& stream, const int2023_t& value) {
     }
     stream << static_cast<int>(value.data[int2023_t::kDataSize - 1]);
     stream << ')';
-
     return stream;
 }

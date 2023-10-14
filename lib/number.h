@@ -1,8 +1,6 @@
 #pragma once
 #include <cinttypes>
 #include <iostream>
-#include <stdint.h>
-#include <vcruntime.h>
 
 
 struct int2023_t {
@@ -18,13 +16,13 @@ int2023_t from_int(int32_t i);
 
 int2023_t from_string(const char* buff);
 
-int2023_t operator+(const int2023_t& lhs, const int2023_t& rhs);
+int2023_t operator+(int2023_t lhs, const int2023_t& rhs);
 
-int2023_t operator+(const int2023_t& lhs, const uint8_t rhs);
+int2023_t operator+(int2023_t lhs, uint8_t rhs);
 
 int2023_t& operator+=(int2023_t& lhs, const int2023_t& rhs);
 
-int2023_t& operator+=(int2023_t& lhs, const uint8_t rhs);
+int2023_t& operator+=(int2023_t& lhs, uint8_t rhs);
 
 int2023_t& operator++(int2023_t& rhs);
 
@@ -34,9 +32,9 @@ int2023_t operator-(const int2023_t rhs);
 
 int2023_t operator*(const int2023_t& lhs, const int2023_t& rhs);
 
-int2023_t operator*(const int2023_t& lhs, const uint8_t rhs);
+int2023_t operator*(int2023_t lhs, uint8_t rhs);
 
-int2023_t& operator*=(int2023_t& lhs, const uint8_t rhs);
+int2023_t& operator*=(int2023_t& lhs, uint8_t rhs);
 
 int2023_t operator/(const int2023_t& lhs, const int2023_t& rhs);
 

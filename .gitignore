@@ -37,3 +37,4 @@ test.cpp
 # Directories
 MyTests/
 time_tests/
+build/
