@@ -2,8 +2,6 @@
 
 #include <cstring>
 #include <iostream>
-#include <string>
-#include <vcruntime.h>
 
 int2023_t::int2023_t() {
     memset(data, 0, kDataSize);
