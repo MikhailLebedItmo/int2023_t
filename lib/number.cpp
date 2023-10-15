@@ -3,6 +3,7 @@
 #include <cstring>
 #include <iostream>
 #include <string>
+#include <vcruntime.h>
 
 int2023_t::int2023_t() {
     memset(data, 0, kDataSize);
@@ -98,7 +99,7 @@ int2023_t operator-(int2023_t rhs) {
     return rhs;
 }
 
-int2023_t shift_digits_to_left(int2023_t value, uint8_t shift) {
+int2023_t shift_digits_to_left(int2023_t value, size_t shift) {
     // return value * 256^shift
     for (size_t t = 0; t < int2023_t::kDataSize - shift; ++t) {
             value.data[t] = value.data[t + shift];
@@ -136,7 +137,7 @@ int2023_t& operator*=(int2023_t& lhs, uint8_t rhs) {
     return lhs;
 }
 
-void sum_with_shift(int2023_t& lhs, const int2023_t& rhs, uint8_t shift) {
+void sum_with_shift(int2023_t& lhs, const int2023_t& rhs, size_t shift) {
     // lhs = lhs + rhs * 256^shift
     uint32_t carry = 0;
     for (int i = int2023_t::kDataSize - static_cast<int>(shift) - 1; i >= 0; --i) {
@@ -226,12 +227,29 @@ bool operator!=(const int2023_t& lhs, const int2023_t& rhs) {
     return !(lhs == rhs);
 }
 
-std::ostream& operator<<(std::ostream& stream, const int2023_t& value) {
-    stream << '(';
-    for (size_t i = get_ind_of_first_digit(value); i < int2023_t::kDataSize - 1; ++i) {
-        stream << static_cast<int>(value.data[i]) << ' ';
+char get_hex_digit(uint8_t num) {
+    if (num >= 0 && num <= 9) {
+
+        return num + '0';
     }
-    stream << static_cast<int>(value.data[int2023_t::kDataSize - 1]);
-    stream << ')';
+
+    return num - 10 + 'A';
+}
+
+std::ostream& operator<<(std::ostream& stream, const int2023_t& value) {
+    char hex_str[int2023_t::kDataSize * 2 + 1];
+    size_t digit_ind = 0;
+    uint8_t second_digit_mask = 0b00001111;
+    for (size_t i = get_ind_of_first_digit(value); i < int2023_t::kDataSize; ++i) {
+        hex_str[digit_ind++] = get_hex_digit((value.data[i] >> 4));
+        hex_str[digit_ind++] = get_hex_digit(value.data[i] & second_digit_mask);
+    }
+    hex_str[digit_ind] = '\0';
+    if (hex_str[0] == '0') {
+        stream << hex_str + 1;
+    } else {
+        stream << hex_str;
+    }
+    
     return stream;
 }
