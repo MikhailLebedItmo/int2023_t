@@ -1,3 +1,5 @@
+// Для тестирования используются операторы сравнения самого класса
+
 #include <lib/number.h>
 #include <gtest/gtest.h>
 #include <tuple>
